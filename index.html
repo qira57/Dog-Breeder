@@ -172,6 +172,7 @@
 			//FB.PrintArray(FB_List);
 			*/
 			$("#submit").click(function(){
+				$('[id*="row"]').remove();
 				var $maleStr = $("#male").val();
 				var $femaleStr = $("#female").val();
 				var Male_Dog = [];
