@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dog-Test</title>
+		<meta charset="utf-8">
+		<style>
+			table th{
+				border: solid;
+			}
+			table tr{
+				border: thin;
+			}
+		</style>
+	</head>
+	<body>
+		<label style = "display: block">
+			<input id = "male"></input>
+			Male
+		</label>
+		<label style = "display: block">
+			<input id = "female"></input>
+			Female
+		</label>
+		<button id = "submit">Test Genetics</button>
+		<table id="results">
+			<thead>
+				<th>Appearance</th>
+				<th>Percent chance</th>
+			</thead>
+			<tbody>
+			
+			</tbody>
+			
+	</table>
+		
+		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script>
+			var Dogs = function(){
+			};
+			Dogs.prototype.Generate = function(Base,Agouti){
+				var Array1 =[];
+				for(var i = 0; i < Base.length; i++){
+					for(var j = 0; j < Agouti.length; j++){
+						Array1.push(Base[i] + Agouti[j]);
+					}
+				}
+				return Array1;
+			};
+			Dogs.prototype.Assemble = function(Dogs,Dna){
+				var Array1 = [];
+				for (var i = 0; i < Dogs.length; i++){
+					Array1.push(Dogs[i] + ", " + Dna[i]);
+				}
+				Array1[i+1] = (Dogs.length + " Total Types of Dogs");
+				return Array1;
+			};
+			Dogs.prototype.PrintArray = function(InputArray){
+				for(var i = 0; i<InputArray.length; i++){
+					console.log(InputArray[i]);
+				}
+			};
+			Dogs.prototype.Punnett = function(Male,Female){
+				var Array1 = [];
+				for(var i = 0; i<Male.length; i++){
+					for(var j = 0; j<Female.length; j++){
+						Array1.push(Male[i] + Female[j]);
+					}
+				}
+				for(var i = 0; i<Array1.length; i++){
+					if (Array1[i] === "bB"){
+						Array1[i] = "Bb";
+					}
+					if (Array1[i] === "dD"){
+						Array1[i] = "Dd";
+					}
+					if (Array1[i] === "atay"){
+						Array1[i] = "ayat";
+					}
+					if (Array1[i] === "aay"){
+						Array1[i] = "aya";
+					}
+					if (Array1[i] === "aat"){
+						Array1[i] = "ata";
+					}
+				}
+				return(Array1);
+			};
+			Dogs.prototype.ArrayIndexOf = function(Punnet,DnaList){
+				var Array1 = [];
+				for(var i = 0; i<Punnet.length; i++){
+					Array1.push(DnaList.indexOf(Punnet[i]));
+				}
+				return(Array1);
+			};
+			Dogs.prototype.PunnettAssemble = function(PunnettB,PunnettD,PunnettA){
+				var Array1 = [];
+				for(var i = 0; i < PunnettB.length; i++){
+					for(var j = 0; j < PunnettD.length; j++){
+						for(var k = 0; k < PunnettA.length; k++){
+							Array1.push(PunnettB[i] + PunnettD[j] + PunnettA[k]);
+						}
+					}
+				}
+				return Array1;
+			};
+			Dogs.prototype.Punnettcondense = function(Punnett){
+				var Array1=[];
+				for(var i =0; i<Punnett.length; i++){
+					Array1[i] = Punnett[i];
+				}
+				for(var i = 0; i<Array1.length-1;i++){
+					for(var j = i+1; j < Array1.length; j++){
+						if (Array1[i] === Array1[j]){
+							Array1.splice(j,1);
+							j=i;
+						}
+					}
+				}
+				return Array1;
+			};
+			Dogs.prototype.PunnettFreq = function(Original,Condensed){
+				var Array1 = [];
+				for(var i = 0; i<Condensed.length; i++){
+					Array1[i] = 0;
+				}
+				for(var i = 0; i<Condensed.length; i++){
+					for(var j = 0; j<Original.length;j++){
+						if(Original[j] === Condensed[i]){
+							Array1[i]++;
+						}
+					}
+				}
+				return Array1;
+			};
+			Dogs.prototype.Probabilities = function(FreqList,Idlist){
+				var Array1 = [];
+				for(var i = 0; i<FreqList.length; i++){
+					Array1[i] = " %" + FreqList[i]/Idlist.length * 100;
+				}
+				return Array1;
+			};
+			Dogs.prototype.FinalDisplay = function(FinalId,FinalProb,Types){
+				var newArray = [];
+				for(var i = 0; i<FinalId.length; i++){
+					newArray.push(Types[FinalId[i]]+FinalProb[i]);
+				}
+				return newArray;
+			};
+			var FB = new Dogs();
+			var FB_Base = ["Black, ","Black carrying blue, ","Black carrying chocolate, ","Black carrying blue and chocolate, ","Blue, ","Blue carrying chocolate, ","Chocolate, ","Chocolate carrying blue, ","Lilac, "];
+			var FB_Base_Dna = ["BBDD","BBDd","BbDD","BbDd","BBdd","Bbdd","bbDD","bbDd","bbdd"];
+			var FB_B = ["Non-chocolate","Carrying Chocolate","Chocolate"];
+			var FB_B_Dna = ["BB","Bb","bb"];
+			var FB_D = ["Non-blue","Carrying Blue","Blue"];
+			var FB_D_Dna = ["DD","Dd","dd"];
+			var FB_Agouti = ["Fawn","Fawn carrying Tan Points","Fawn carrying Solid","Tan Points","Tan Points carrying Solid","Solid"];
+			var FB_Agouti_Dna = ["ayay","ayat","aya","atat","ata","aa"];
+			var FB_Dogs = FB.Generate(FB_Base,FB_Agouti);
+			var FB_Dna = FB.Generate(FB_Base_Dna,FB_Agouti_Dna);
+			var FB_List = FB.Assemble(FB_Dogs,FB_Dna);
+			/*
+			//FB.PrintArray(FB_Base);
+			//FB.PrintArray(FB_Base_Dna);
+			//FB.PrintArray(FB_B);
+			//FB.PrintArray(FB_B_Dna);
+			//FB.PrintArray(FB_D);
+			//FB.PrintArray(FB_D_Dna);
+			//FB.PrintArray(FB_Agouti);
+			//FB.PrintArray(FB_Agouti_Dna);
+			//FB.PrintArray(FB_Dogs);
+			//FB.PrintArray(FB_Dna);
+			//FB.PrintArray(FB_List);
+			*/
+			$("#submit").click(function(){
+				var $maleStr = $("#male").val();
+				var $femaleStr = $("#female").val();
+				var Male_Dog = [];
+				for (var i = 0; i < $maleStr.length; i++){
+					if ($maleStr.substring(i, i+2) === "ay" || $maleStr.substring(i, i+2) === "at"){
+						Male_Dog.push($maleStr.substring(i,i+2));
+						i++;
+					} else {
+						Male_Dog.push($maleStr.substring(i,i+1));
+					}
+					
+				}
+				console.log(Male_Dog);
+				var Female_Dog = [];
+				for (var i = 0; i < $femaleStr.length; i++){
+					if ($femaleStr.substring(i, i+2) === "ay" || $femaleStr.substring(i, i+2) === "at"){
+						Female_Dog.push($femaleStr.substring(i,i+2));
+						i++;
+					} else {
+						Female_Dog.push($femaleStr.substring(i,i+1));
+					}
+				}
+				console.log(Female_Dog);
+				var Male_B = [Male_Dog[0],Male_Dog[1]];
+				var Female_B = [Female_Dog[0],Female_Dog[1]];
+				var Male_D = [Male_Dog[2],Male_Dog[3]];
+				var Female_D = [Female_Dog[2],Female_Dog[3]];
+				var Male_A = [Male_Dog[4],Male_Dog[5]];
+				var Female_A = [Female_Dog[4],Female_Dog[5]];
+				var Male_Id = FB_Dna.indexOf(Male_Dog[0]+Male_Dog[1]+Male_Dog[2]+Male_Dog[3]+Male_Dog[4]+Male_Dog[5]);
+				var Female_Id = FB_Dna.indexOf(Female_Dog[0]+Female_Dog[1]+Female_Dog[2]+Female_Dog[3]+Female_Dog[4]+Female_Dog[5]);
+				var Male_Base_Id = FB_Base_Dna.indexOf(Male_Dog[0]+Male_Dog[1]+Male_Dog[2]+Male_Dog[3]);
+				var Female_Base_Id = FB_Base_Dna.indexOf(Female_Dog[0]+Female_Dog[1]+Female_Dog[2]+Female_Dog[3]);
+				var Male_Agouti_Id = FB_Agouti_Dna.indexOf(Male_Dog[4]+Male_Dog[5]);
+				var Female_Agouti_Id = FB_Agouti_Dna.indexOf(Female_Dog[4]+Female_Dog[5]);
+				/*
+				//console.log(Male_Dog);
+				//console.log(Female_Dog);
+				//console.log(Male_B);
+				//console.log(Female_B);
+				//console.log(Male_D);
+				//console.log(Female_D);
+				//console.log(Male_A);
+				//console.log(Female_A);
+				//console.log(FB_Dogs[Male_Id] + ", " + Male_Id);
+				//console.log(FB_Dogs[Female_Id] + ", " + Female_Id);
+				//console.log(FB_Base[Male_Base_Id]);
+				//console.log(FB_Base[Female_Base_Id]);
+				//console.log(FB_Agouti[Male_Agouti_Id]);
+				//console.log(FB_Agouti[Female_Agouti_Id]);
+				*/
+				var B_Punnett = FB.Punnett(Male_B,Female_B);
+				var D_Punnett = FB.Punnett(Male_D,Female_D);
+				var A_Punnett = FB.Punnett(Male_A,Female_A);
+				var B_Punnett_Id = FB.ArrayIndexOf(B_Punnett,FB_B_Dna);
+				var D_Punnett_Id = FB.ArrayIndexOf(D_Punnett,FB_D_Dna);
+				var A_Punnett_Id = FB.ArrayIndexOf(A_Punnett,FB_Agouti_Dna);
+				var Final_Punnett = FB.PunnettAssemble(B_Punnett,D_Punnett,A_Punnett);
+				var Final_Punnett_Id = FB.ArrayIndexOf(Final_Punnett,FB_Dna);
+				var Final_Punnett_Id_Condensed = FB.Punnettcondense(Final_Punnett_Id);
+				var Final_Punnett_Freq = FB.PunnettFreq(Final_Punnett_Id,Final_Punnett_Id_Condensed);
+				var Prob_List = FB.Probabilities(Final_Punnett_Freq, Final_Punnett_Id);
+				/*
+				//FB.PrintArray(B_Punnett);
+				//FB.PrintArray(D_Punnett);
+				//FB.PrintArray(A_Punnett);
+				//FB.PrintArray(B_Punnett_Id);
+				//FB.PrintArray(D_Punnett_Id);
+				//FB.PrintArray(A_Punnett_Id);
+				//FB.PrintArray(Final_Punnett);
+				//FB.PrintArray(Final_Punnett_Id);
+				//FB.PrintArray(Changeable_Ids);
+				//FB.PrintArray(Final_Punnett_Id_Condensed);
+				//FB.PrintArray(Final_Punnett_Freq);
+				//FB.PrintArray(Prob_List);
+				*/
+				var $FinalArray = $(FB.FinalDisplay(Final_Punnett_Id_Condensed, Prob_List, FB_Dogs));
+				console.log($FinalArray)
+				$FinalArray.each(function(index, element){
+					console.log(element);
+					console.log(element.search("%"));
+					var percentage = element.substring(element.search("%"), element.length);
+					console.log(percentage);
+					$("<tr>")
+						.appendTo("#results tbody")
+						.attr("id", "row" + index);
+					$("<td>")
+						.appendTo("#row" + index)
+						.text(element.replace(percentage, ""));
+					$("<td>")
+						.appendTo("#row" + index)
+						.text(percentage);
+						
+				})
+			});
+		</script>
+	</body>
+</html>
